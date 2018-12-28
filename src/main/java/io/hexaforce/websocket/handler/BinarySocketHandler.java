@@ -1,4 +1,4 @@
-package io.hexaforce.websocket;
+package io.hexaforce.websocket.handler;
 
 import org.springframework.web.socket.handler.BinaryWebSocketHandler;
 

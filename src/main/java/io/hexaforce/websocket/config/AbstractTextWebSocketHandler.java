@@ -1,4 +1,4 @@
-package io.hexaforce.websocket;
+package io.hexaforce.websocket.config;
 
 import java.util.Map;
 import java.util.Set;
@@ -12,10 +12,19 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Sets;
 
+import io.hexaforce.websocket.model.SessionGroup;
+
+/**
+ * @author tantakatomokazu
+ *
+ * @param <G> SessionGroup
+ * @param <C> SocketChanne
+ * @param <T> Data
+ */
 public abstract class AbstractTextWebSocketHandler<G, C, T> extends TextWebSocketHandler {
 
     protected ObjectMapper objectMapper;
-    
+
     protected Map<G, Set<WebSocketSession>> sessionPool;
 
     public AbstractTextWebSocketHandler(ObjectMapper objectMapper, DataChanneGenerator<G, C> dataChanneGenerator) {
@@ -44,28 +53,33 @@ public abstract class AbstractTextWebSocketHandler<G, C, T> extends TextWebSocke
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        
+
         // TODO Login Check here!!
-        
+
         userRequest(session);
+
+    }
+
+    public static interface DataChanneGenerator<G, C> {
+        
+        G getSessionGroup();
+
+        Set<C> channeList();
         
     }
-    
-    public static interface DataChanneGenerator<G, C> {
-        G getSessionGroup();
-        Set<C> channeList();
-    }
-    
+
     public abstract SessionGroup getSessionGroup(WebSocketSession session);
-    
+
     public abstract void afterSessionRegist(WebSocketSession session);
 
     public abstract void afterSessionRelease(WebSocketSession session);
-    
-    public abstract void userRequest(WebSocketSession session);
-    
-    public abstract void broadcast(T data);
 
-    public abstract void unicast(T data);
+    public abstract void userRequest(WebSocketSession session);
+
+    public abstract void broadcast(T data);
     
+    public abstract void multicast(T data);
+    
+    public abstract void unicast(T data);
+
 }

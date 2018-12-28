@@ -1,4 +1,4 @@
-package io.hexaforce.websocket;
+package io.hexaforce.websocket.model;
 
 public enum SessionGroup {
     BUY(1),
