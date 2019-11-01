@@ -1,4 +1,4 @@
-package com.example.websocket;
+package com.example.websocket.text;
 
 import java.io.IOException;
 
@@ -11,8 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TextWebSocketHandler extends AbstractTextWebSocketHandler {
 
+	public final static String PATH = "/ws/text";
+
 	public void unicast(TextMessage message) {
-		
+
 	}
 
 	public void multicast(TextMessage message) {
@@ -22,7 +24,8 @@ public class TextWebSocketHandler extends AbstractTextWebSocketHandler {
 	public void broadcast(TextMessage message) {
 		sessions.parallelStream().forEach(session -> {
 			try {
-				session.sendMessage(message);session.getPrincipal();
+				session.sendMessage(message);
+				session.getPrincipal();
 			} catch (IOException e) {
 				log.error(e.getMessage(), e);
 			}
@@ -37,7 +40,8 @@ public class TextWebSocketHandler extends AbstractTextWebSocketHandler {
 
 	@Override
 	protected void handlePongMessage(WebSocketSession session, PongMessage message) throws Exception {
-		// TODO Auto-generated method stub
+		String value = defaultMapper.writeValueAsString(message);
+		log.info("value:{}", value);
 	}
 
 }

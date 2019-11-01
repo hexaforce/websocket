@@ -2,10 +2,14 @@ package com.example.websocket;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+
+import com.example.websocket.binary.BinaryWebSocketHandler;
+import com.example.websocket.text.TextWebSocketHandler;
 
 @SpringBootApplication
 public class WebsocketApplication {
@@ -18,13 +22,22 @@ public class WebsocketApplication {
 	@EnableWebSocket
 	public class WebSocketConfig implements WebSocketConfigurer {
 
-		final private String PATH = "/ws";
-
 		@Override
 		public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-			registry.addHandler(new TextWebSocketHandler(), PATH);
+			registry.addHandler(textWebSocketHandler(), TextWebSocketHandler.PATH);
+			registry.addHandler(binaryWebSocketHandler(), BinaryWebSocketHandler.PATH);
 		}
 
+	}
+	
+	@Bean
+	public TextWebSocketHandler textWebSocketHandler() {
+		return new TextWebSocketHandler();
+	}
+
+	@Bean
+	public BinaryWebSocketHandler binaryWebSocketHandler() {
+		return new BinaryWebSocketHandler();
 	}
 	
 }

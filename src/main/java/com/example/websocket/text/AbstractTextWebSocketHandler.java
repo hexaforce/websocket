@@ -1,4 +1,4 @@
-package com.example.websocket;
+package com.example.websocket.text;
 
 import java.io.IOException;
 import java.util.List;
@@ -21,9 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AbstractTextWebSocketHandler implements WebSocketHandler {
 
-	final protected List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
+	protected final List<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
 
-	final protected ObjectMapper defaultMapper = new ObjectMapper();
+	protected final ObjectMapper defaultMapper = new ObjectMapper();
 
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
