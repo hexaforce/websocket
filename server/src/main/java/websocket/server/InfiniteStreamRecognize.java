@@ -46,7 +46,6 @@ public class InfiniteStreamRecognize implements Runnable {
 
 		@Override
 		public void onStart(StreamController controller) {
-			log.info("onStart");
 			referenceToStreamController = controller;
 		}
 

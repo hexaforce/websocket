@@ -22,10 +22,10 @@ public class Microphone {
 	final String DESTINATION_ENDPOINT = "ws://localhost:8080/" + WebSocketClientHandler.PATH;
 
 	// SampleRate:16000Hz, SampleSizeInBits: 16, Number of channels: 1, Signed: true, bigEndian: false
-	final AudioFormat audioFormat = new AudioFormat(16000, 16, 1, true, false);
+	public static final AudioFormat audioFormat = new AudioFormat(16000, 16, 1, true, false);
 
 	// Set the system information to read from the microphone audio stream
-	final DataLine.Info targetInfo = new Info(TargetDataLine.class, audioFormat);
+	public static final DataLine.Info targetInfo = new Info(TargetDataLine.class, audioFormat);
 
 	// buffer size in bytes
 	final int BYTES_PER_BUFFER = 6400;

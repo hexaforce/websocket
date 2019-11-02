@@ -15,8 +15,9 @@ public class BinaryWebSocketHandler extends AbstractBinaryWebSocketHandler {
 
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
-		byte[] buffer = new byte[message.getPayloadLength()];
-		message.getPayload().get(buffer);
+		message.getPayload().position(0);
+		byte[] buffer = message.getPayload().array();
+		session.sendMessage(message);
 		InfiniteStreamRecognize.sharedQueue.put(ByteString.copyFrom(buffer));
 	}
 
