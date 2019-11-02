@@ -23,6 +23,8 @@ repositories {
 }
 
 dependencies {
+	// https://www.atilika.com/ja/kuromoji
+	compile group: 'com.atilika.kuromoji', name: 'kuromoji-ipadic', version: '0.9.0'
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	compile group: 'com.google.cloud', name: 'google-cloud-speech', version: '1.21.0'

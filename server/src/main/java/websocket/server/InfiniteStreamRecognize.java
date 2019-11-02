@@ -56,13 +56,22 @@ public class InfiniteStreamRecognize implements Runnable {
 			for (StreamingRecognitionResult result : response.getResultsList()) {
 
 				float stability = result.getStability();
-				long resultEndTime = ((result.getResultEndTime().getSeconds() * 1000) + (result.getResultEndTime().getNanos() / 1000000));
+
+				long end = ((result.getResultEndTime().getSeconds() * 1000) + (result.getResultEndTime().getNanos() / 1000000));
+				String resultEndTime = new Timestamp(end).toString().replace("1970-01-01 09:", "");
+
 				boolean _final = result.getIsFinal();
 
 				for (SpeechRecognitionAlternative alternative : result.getAlternativesList()) {
+
 					String transcript = alternative.getTranscript();
+
 					float confidence = alternative.getConfidence();
-					RecognitionResponse jsonElement = RecognitionResponse.builder().resultEndTime(new Timestamp(resultEndTime))._final(_final).stability(stability).transcript(transcript).confidence(confidence).build();
+
+					float score = stability + confidence;
+
+					RecognitionResponse jsonElement = RecognitionResponse.builder().resultEndTime(resultEndTime)._final(_final).transcript(transcript).score(score).build();
+
 					try {
 						log.info(jsonElement.toString());
 						if (session.isOpen())
