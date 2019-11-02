@@ -2,7 +2,6 @@ package websocket.client;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.util.UUID;
 
 import org.springframework.web.socket.BinaryMessage;
@@ -19,18 +18,17 @@ public class WebSocketClientHandler extends AbstractWebSocketClientHandler {
 
 	public final static String PATH = "/ws/binary";
 
-	private BufferedOutputStream2 bufferedOutputStream;
-	
+	private BufferedOutputStream bufferedOutputStream;
+
 	private String uuid = "";
-	
+
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-		
+
 		RecognitionResponse response = new Gson().fromJson(message.getPayload(), RecognitionResponse.class);
 		if (response.is_final()) {
-			int bufferedSize = bufferedOutputStream.size();
 			bufferedOutputStream.flush();
-			new Thread(new Speecker(uuid, bufferedSize)).run();
+			new Thread(new Speecker(uuid)).run();
 			bufferedOutputStream.close();
 			this.bufferedOutputStream = null;
 			log.info("Message: {}", message.getPayload());
@@ -39,31 +37,22 @@ public class WebSocketClientHandler extends AbstractWebSocketClientHandler {
 
 	@Override
 	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
+		
 		message.getPayload().position(0);
 		byte[] buffer = message.getPayload().array();
-		
+
 		if (bufferedOutputStream == null) {
 			this.uuid = UUID.randomUUID().toString();
-			this.bufferedOutputStream = new BufferedOutputStream2(new FileOutputStream(uuid));
+			this.bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(uuid));
 		} else {
 			this.bufferedOutputStream.write(buffer);
 		}
+		
 	}
 
 	@Override
 	protected void handlePongMessage(WebSocketSession session, PongMessage message) throws Exception {
 		log.info("handlePongMessage");
-	}
-	
-	public class BufferedOutputStream2 extends BufferedOutputStream{
-
-		public BufferedOutputStream2(OutputStream out) {
-			super(out);
-		}
-		public int size() {
-			return super.buf.length;
-		}
-		
 	}
 
 }

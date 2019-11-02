@@ -47,7 +47,11 @@ public class Microphone {
 			if ((numBytesRead <= 0) && (targetDataLine.isOpen())) {
 				continue;
 			}
-			future.get().sendMessage(new BinaryMessage(data));
+			try {
+				future.get().sendMessage(new BinaryMessage(data));
+			} catch (IllegalStateException e) {
+				
+			}
 		}
 
 	}
