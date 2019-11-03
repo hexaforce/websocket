@@ -23,9 +23,8 @@ public class WebSocketClientHandler extends AbstractWebSocketClientHandler {
 	private String uuid = "";
 
 	@Override
-	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-
-		RecognitionResponse response = new Gson().fromJson(message.getPayload(), RecognitionResponse.class);
+	protected void handleTextMessage(WebSocketSession session, TextMessage message, String text) throws Exception {
+		RecognitionResponse response = new Gson().fromJson(text, RecognitionResponse.class);
 		if (response.is_final()) {
 			bufferedOutputStream.flush();
 			new Thread(new Speecker(uuid)).run();
@@ -36,23 +35,17 @@ public class WebSocketClientHandler extends AbstractWebSocketClientHandler {
 	}
 
 	@Override
-	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
-		
-		message.getPayload().position(0);
-		byte[] buffer = message.getPayload().array();
-
+	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message, byte[] binary) throws Exception {
 		if (bufferedOutputStream == null) {
 			this.uuid = UUID.randomUUID().toString();
 			this.bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(uuid));
-		} else {
-			this.bufferedOutputStream.write(buffer);
 		}
-		
+		this.bufferedOutputStream.write(binary);
 	}
 
 	@Override
 	protected void handlePongMessage(WebSocketSession session, PongMessage message) throws Exception {
-		log.info("handlePongMessage");
+		log.info(message.getPayload().toString());
 	}
 
 }

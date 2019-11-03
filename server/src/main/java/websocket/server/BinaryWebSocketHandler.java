@@ -14,11 +14,9 @@ public class BinaryWebSocketHandler extends AbstractBinaryWebSocketHandler {
 	public final static String PATH = "/ws/binary";
 
 	@Override
-	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
-		message.getPayload().position(0);
-		byte[] buffer = message.getPayload().array();
+	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message, byte[] binary) throws Exception {
 		session.sendMessage(message);
-		InfiniteStreamRecognize.sharedQueue.put(ByteString.copyFrom(buffer));
+		InfiniteStreamRecognize.sharedQueue.put(ByteString.copyFrom(binary));
 	}
 
 	@Override

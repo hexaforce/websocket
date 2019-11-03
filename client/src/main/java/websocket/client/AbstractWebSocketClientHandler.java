@@ -21,9 +21,14 @@ public abstract class AbstractWebSocketClientHandler implements WebSocketHandler
 	@Override
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
 		if (message instanceof TextMessage) {
-			handleTextMessage(session, (TextMessage) message);
+			TextMessage textMessage = (TextMessage) message;
+			String text = textMessage.getPayload();
+			handleTextMessage(session, textMessage, text);
 		} else if (message instanceof BinaryMessage) {
-			handleBinaryMessage(session, (BinaryMessage) message);
+			BinaryMessage binaryMessage = (BinaryMessage) message;
+			binaryMessage.getPayload().position(0);
+			byte[] binary = binaryMessage.getPayload().array();
+			handleBinaryMessage(session, binaryMessage, binary);
 		} else if (message instanceof PongMessage) {
 			handlePongMessage(session, (PongMessage) message);
 		} else {
@@ -31,9 +36,9 @@ public abstract class AbstractWebSocketClientHandler implements WebSocketHandler
 		}
 	}
 
-	abstract protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception;
+	abstract protected void handleTextMessage(WebSocketSession session, TextMessage message, String text) throws Exception;
 
-	abstract protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception;
+	abstract protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message, byte[] binary) throws Exception;
 
 	abstract protected void handlePongMessage(WebSocketSession session, PongMessage message) throws Exception;
 
