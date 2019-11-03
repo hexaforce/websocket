@@ -30,7 +30,7 @@ public class WebSocketClientHandler extends AbstractWebSocketClientHandler {
 			new Thread(new Speecker(uuid)).run();
 			bufferedOutputStream.close();
 			this.bufferedOutputStream = null;
-			log.info("Message: {}", message.getPayload());
+			log.info("[CREATE] {} Message: {}", uuid, message.getPayload());
 		}
 	}
 

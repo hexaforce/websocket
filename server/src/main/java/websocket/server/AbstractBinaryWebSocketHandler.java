@@ -59,8 +59,8 @@ public abstract class AbstractBinaryWebSocketHandler implements WebSocketHandler
 
 	@Override
 	public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-		if (exception instanceof EOFException) {
-			log.info(exception.getClass().getSimpleName());
+		if (exception instanceof EOFException || exception instanceof IOException) {
+			log.error("{} {} ", exception.getClass().getSimpleName(), exception.getMessage());
 		} else {
 			log.error(exception.getMessage(), exception);
 		}

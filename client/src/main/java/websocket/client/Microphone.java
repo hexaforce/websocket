@@ -1,6 +1,7 @@
 package websocket.client;
 
 import static java.lang.System.out;
+import static java.lang.System.err;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -27,6 +28,8 @@ public class Microphone {
 	// Set the system information to read from the microphone audio stream
 	public static final DataLine.Info targetInfo = new Info(TargetDataLine.class, audioFormat);
 
+	public static boolean PLAY = false;
+
 	// buffer size in bytes
 	final int BYTES_PER_BUFFER = 6400;
 
@@ -50,7 +53,7 @@ public class Microphone {
 			try {
 				future.get().sendMessage(new BinaryMessage(data));
 			} catch (IllegalStateException e) {
-				
+				err.println(e.getMessage());
 			}
 		}
 

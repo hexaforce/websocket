@@ -8,7 +8,9 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @AllArgsConstructor
 public class Speecker implements Runnable {
 
@@ -16,32 +18,29 @@ public class Speecker implements Runnable {
 
 	@Override
 	public void run() {
-
-		System.out.println(uuid);
-
+		
 		try {
 
 			File file = new File(uuid);
-
 			FileInputStream fileInputStream = new FileInputStream(file);
-
 			AudioInputStream audioInputStream = new AudioInputStream(fileInputStream, Microphone.audioFormat, file.length());
 
 			Clip clip = AudioSystem.getClip();
-
+			clip.loop(1);
 			clip.open(audioInputStream);
-
 			clip.start();
 
-			Thread.sleep(3000);
+			Microphone.PLAY = true;
+			while (clip.isRunning()) {}
+			Microphone.PLAY = false;
 
+			log.info("[DELETE] {}", file.getName());
 			file.delete();
 
 		} catch (Exception e) {
-
-			System.err.println(e.getMessage());
-
+			log.error(e.getMessage());
 		}
+		
 	}
 
 }
