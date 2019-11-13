@@ -1,2 +1,9 @@
 bin/
 .history/
+.DS_Store
+.project
+.settings/
+.factorypath
+common/.project
+common/target/classes/META-INF/MANIFEST.MF
+.DS_Store
